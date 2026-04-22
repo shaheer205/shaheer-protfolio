@@ -1,32 +1,50 @@
 import { useState } from "react";
 import { Github, Linkedin, Mail, Send, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import emailjs from "emailjs-com";
+
 
 export const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sending, setSending] = useState(false);
 
   const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      toast.error("Please fill out all fields.");
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      toast.error("Please enter a valid email.");
-      return;
-    }
-    setSending(true);
-    setTimeout(() => {
-      toast.success("Message ready! Opening your email client…");
-      window.location.href = `mailto:hello@shaheer.dev?subject=Project inquiry from ${encodeURIComponent(
-        form.name,
-      )}&body=${encodeURIComponent(form.message + "\n\n— " + form.name + " (" + form.email + ")")}`;
-      setSending(false);
-      setForm({ name: "", email: "", message: "" });
-    }, 600);
-  };
+  e.preventDefault();
 
+  if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+    toast.error("Please fill out all fields.");
+    return;
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    toast.error("Please enter a valid email.");
+    return;
+  }
+
+  setSending(true);
+
+  emailjs.send(
+    "service_j8uei9g",
+    "template_6hgwkkg",
+    {
+      name: form.name,
+      email: form.email,
+      message: form.message,
+    },
+    "YuKDX2sr66FV6q7CF"
+  )
+  .then(() => {
+    toast.success("Email sent successfully ✅");
+    setForm({ name: "", email: "", message: "" });
+  })
+  .catch((error) => {
+    console.log(error);
+    toast.error("Failed to send ❌");
+  })
+  .finally(() => {
+    setSending(false);
+  });
+};
   return (
     <section id="contact" className="section">
       <div className="text-center mb-16">
