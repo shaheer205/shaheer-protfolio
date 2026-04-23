@@ -7,7 +7,7 @@ const PROJECTS = [
     description:
       "Smart Money Concepts bot that detects order blocks, liquidity sweeps and structure shifts — sending real-time signals via Telegram.",
     tags: ["Python", "Pandas", "MT5", "Telegram API"],
-    github: "#",
+    github: "https://github.com/shaheer205/smc-bot",
     demo: "#",
     accent: "from-primary to-secondary",
   },
